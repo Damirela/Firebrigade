@@ -5,14 +5,20 @@ import { HttpModule } from '@angular/http';
 import { ClarityModule } from 'clarity-angular';
 import { AppComponent } from './app.component';
 import { ROUTING } from "./app.routing";
-import { HomeComponent } from "./home/home.component";
-import { AboutComponent } from "./about/about.component";
+import { FirerunsComponent } from "./fireruns/fireruns.component";
+import { CalendarComponent} from "./calendar/calendar.component";
+import { ProfileComponent} from "./profile/profile.component";
+import { SettingsComponent} from "./settings/settings.component";
+import { AddFirerunComponent} from "./add-firerun/add-firerun.component";
 
 @NgModule({
     declarations: [
         AppComponent,
-        AboutComponent,
-        HomeComponent
+        FirerunsComponent,
+        CalendarComponent,
+        ProfileComponent,
+        SettingsComponent,
+        AddFirerunComponent
     ],
     imports: [
         BrowserModule,
