@@ -6,9 +6,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-    styleUrls: ['./about.component.scss'],
-    templateUrl: './about.component.html'
+    styleUrls: ['./calendar.component.scss'],
+    templateUrl: './calendar.component.html'
 })
-export class AboutComponent {
+export class CalendarComponent {
 
 }
