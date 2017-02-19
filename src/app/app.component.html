@@ -3,12 +3,12 @@
     <div class="branding">
       <a href="#" class="nav-link">
         <span class="clr-icon clr-clarity-logo"></span>
-        <span class="title">Firebrigade</span>
+        <span class="title">Clarity</span>
       </a>
     </div>
     <form class="search">
       <label for="search_input">
-        <input id="search_input" type="text" placeholder="Nach Einsätzen suchen...">
+        <input id="search_input" type="text" placeholder="Search for Components...">
       </label>
     </form>
     <div class="header-actions">
@@ -17,20 +17,11 @@
   <nav class="sub-nav" [clr-nav-level]="1">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link" href="#" [routerLink]="['/fireruns']"
-           [class.active]="router.url==='/fireruns' || router.url==='/'">Einsätze</a>
+        <a class="nav-link" href="#" [routerLink]="['/home']"
+           [class.active]="router.url==='/home' || router.url==='/'">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" [routerLink]="['/calendar']" 
-           [class.active]="router.url==='/calendar'">Kalender</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" [routerLink]="['/profile']"
-           [class.active]="router.url==='/profile'">Profil</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" [routerLink]="['/settings']" 
-           [class.active]="router.url==='/settings'">Einstellungen</a>
+        <a class="nav-link" href="#" [routerLink]="['/about']" [class.active]="router.url==='/about'">About</a>
       </li>
     </ul>
   </nav>
