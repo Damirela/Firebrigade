@@ -1,89 +1,32 @@
-<button class="btn btn-primary" (click)="add = true" type="button"><clr-icon shape="add big"></clr-icon> Einsatz anlegen</button>
+<button class="btn btn-primary" (click)="showAdd = true" type="button"><clr-icon shape="add big"></clr-icon> Einsatz anlegen</button>
 <table class="table">
   <thead>
     <tr>
       <th class="left">Datum&nbsp;/&nbsp;Uhrzeit</th>
       <th class="left">Beschreibung</th>
       <th>Status</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td class="left">Heute, 18:30</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td class="left">Gestern, 01:35</td>
-      <td class="left">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-        sequi nesciunt.</td>
-      <td>6</td>
+    <tr *ngFor="let firerun of fireruns" >
+      <td class="left" title="{{firerun.id}}">{{firerun.created}}</td>
+      <td class="left">{{firerun.description}}</td>
+      <td>{{firerun.participators}}</td>
+      <td><clr-icon shape="arrow up" (click)="addParticipant(firerun.id)"></clr-icon><clr-icon (click)="removeParticipant(firerun.id)" shape="arrow down"></clr-icon></td>
     </tr>
   </tbody>
 </table>
 
-<clr-modal [(clrModalOpen)]="add">
+<clr-modal [(clrModalOpen)]="showAdd">
   <h3 class="modal-title">Neuen Einsatz anlegen</h3>
   <div class="modal-body">
-    <form style="width: 100%">
+    <form [formGroup]="form" novalidate (ngSubmit)="addFirerun() && showAdd = false">
       <section class="form-group">
-        <label for="firerun_text">Beschreibung</label>
-        <textarea rows="5" cols="120" id="firerun_text" placeholder="Bitte die Einsatzbeschreibung angeben" required="true"></textarea>
+        <label for="description">Beschreibung</label>
+        <textarea formControlName="description" name="description" rows="5" cols="120" id="description" placeholder="Bitte die Einsatzbeschreibung angeben" required="true"></textarea>
       </section>
-        <button type="button" class="btn btn-outline" (click)="add = false">Abbrechen</button>
+        <button type="button" class="btn btn-outline" (click)="showAdd = false">Abbrechen</button>
         <button type="submit" class="btn btn-primary">Anlegen</button>
     </form>
   </div>

@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { ClarityModule } from 'clarity-angular';
 import { AppComponent } from './app.component';
 import { ROUTING } from "./app.routing";
+import { ReactiveFormsModule } from '@angular/forms';
 import { FirerunsComponent } from "./fireruns/fireruns.component";
 import { CalendarComponent} from "./calendar/calendar.component";
 import { ProfileComponent} from "./profile/profile.component";
@@ -25,7 +26,9 @@ import { AddFirerunComponent} from "./add-firerun/add-firerun.component";
         FormsModule,
         HttpModule,
         ClarityModule.forRoot(),
-        ROUTING
+        ROUTING,
+        ReactiveFormsModule,
+        FormsModule
     ],
     providers: [],
     bootstrap: [AppComponent]
