@@ -30,9 +30,13 @@ export class FirerunsComponent {
     public showAdd: false;
 
     constructor(private _fb: FormBuilder) {
-        if (localStorage.getItem('fireruns') !== undefined) {
+        this.fireruns = []
+        if (Array.isArray(JSON.parse(localStorage.getItem('fireruns')))) {
             this.fireruns = JSON.parse(localStorage.getItem('fireruns'));
         }
+
+        if (this.fireruns)
+            this.fireruns = this.fireruns.sort((a ,b) => ( a.created >= b.created ) ?  -1 : 1)
     }
     private _getScopeIdentity() {
         let currentMaxId = 0;
@@ -43,6 +47,14 @@ export class FirerunsComponent {
         })
         return currentMaxId;
     }
+    reset() {
+        localStorage.clear();
+        this.fireruns = [];
+    }
+
+    showFireruns() {
+        return this.fireruns && this.fireruns.length > 0
+    }
     ngOnInit() {
 
         // the long way
@@ -52,11 +64,12 @@ export class FirerunsComponent {
             description: new FormControl('', [<any>Validators.required, <any>Validators.minLength(20)]),
         });
     }
-    addFirerun() {
+
+    add() {
         this.fireruns.push(new Firerun(this._getScopeIdentity(), this.form.value.description, 0));
         this.form.reset();
-        this.showAdd = false;
         this.save();
+        this.showAdd = false;
     }
 
     save() {

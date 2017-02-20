@@ -7,10 +7,11 @@ import { AppComponent } from './app.component';
 import { ROUTING } from "./app.routing";
 import { ReactiveFormsModule } from '@angular/forms';
 import { FirerunsComponent } from "./fireruns/fireruns.component";
-import { CalendarComponent} from "./calendar/calendar.component";
-import { ProfileComponent} from "./profile/profile.component";
-import { SettingsComponent} from "./settings/settings.component";
-import { AddFirerunComponent} from "./add-firerun/add-firerun.component";
+import { CalendarComponent } from "./calendar/calendar.component";
+import { ProfileComponent } from "./profile/profile.component";
+import { SettingsComponent } from "./settings/settings.component";
+import { AddFirerunComponent } from "./add-firerun/add-firerun.component";
+import { MomentModule } from 'angular2-moment';
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { AddFirerunComponent} from "./add-firerun/add-firerun.component";
         ClarityModule.forRoot(),
         ROUTING,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        MomentModule
     ],
     providers: [],
     bootstrap: [AppComponent]

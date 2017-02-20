@@ -1,0 +1,57 @@
+{
+	"version": "0.4.0",
+	"configurations": [
+        {
+            "name": "Launch new Chrome on Mac",
+            "type": "chrome",
+            "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "request": "launch",
+            "runtimeArgs": [
+				"--remote-debugging-port=9222" //Open in port 9222 (standard chrome debug port)
+            ],
+            "webRoot": "${workspaceRoot}/src",
+            "url": "http://localhost:4200"
+
+        },
+		{
+			"name": "Attach to chrome on Mac",
+			"type": "chrome",
+			"request": "attach",
+			"port": 9222,
+			"webRoot": "${workspaceRoot}/public",
+			"diagnosticLogging": true,
+			"sourceMaps": true
+		},
+		{
+			"name": "Launch new Chrome on Win",
+			"type": "chrome", // ext install chrome
+			"runtimeExecutable": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+			"request": "launch",
+			"url": "http://localhost:4200/", //Change to whatever you homepage is
+			"runtimeArgs": [
+				"--remote-debugging-port=9222" //Open in port 9222 (standard chrome debug port)
+			],
+			"webRoot": "${workspaceRoot}/public"
+		},
+		{
+			"name": "Launch Node",
+			"type": "node",
+			"request": "launch",
+			"program": "${file}",
+			"stopOnEntry": false,
+			"args": [],
+			"cwd": "${workspaceRoot}",
+			"runtimeExecutable": null,
+			"runtimeArgs": [
+				"--nolazy -V"
+			],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"console": "internalConsole",
+			"preLaunchTask": "",
+			"sourceMaps": false,
+			"outDir": null
+		}
+	]
+}

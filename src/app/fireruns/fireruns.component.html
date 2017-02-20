@@ -1,5 +1,6 @@
 <button class="btn btn-primary" (click)="showAdd = true" type="button"><clr-icon shape="add big"></clr-icon> Einsatz anlegen</button>
-<table class="table">
+<button class="btn btn-warning" (click)="reset()" type="button"><clr-icon shape="remove big"></clr-icon> Zurücksetzen</button>
+<table class="table" *ngIf="showFireruns()" >
   <thead>
     <tr>
       <th class="left">Datum&nbsp;/&nbsp;Uhrzeit</th>
@@ -10,7 +11,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let firerun of fireruns" >
-      <td class="left" title="{{firerun.id}}">{{firerun.created}}</td>
+      <td class="left" title="{{firerun.id}}">{{firerun.created | amTimeAgo}} ({{firerun.created | amDateFormat:'DD. MMM &nbsp;HH:mm:ss'}}&nbsp;Uhr)</td>
       <td class="left">{{firerun.description}}</td>
       <td>{{firerun.participators}}</td>
       <td><clr-icon shape="arrow up" (click)="addParticipant(firerun.id)"></clr-icon><clr-icon (click)="removeParticipant(firerun.id)" shape="arrow down"></clr-icon></td>
@@ -21,7 +22,7 @@
 <clr-modal [(clrModalOpen)]="showAdd">
   <h3 class="modal-title">Neuen Einsatz anlegen</h3>
   <div class="modal-body">
-    <form [formGroup]="form" novalidate (ngSubmit)="addFirerun() && showAdd = false">
+    <form [formGroup]="form" novalidate (ngSubmit)="add()">
       <section class="form-group">
         <label for="description">Beschreibung</label>
         <textarea formControlName="description" name="description" rows="5" cols="120" id="description" placeholder="Bitte die Einsatzbeschreibung angeben" required="true"></textarea>
