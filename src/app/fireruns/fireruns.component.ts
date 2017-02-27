@@ -3,40 +3,36 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { Component } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Firerun } from "../models/firerun.model";
+import { Observable } from 'rxjs/Rx';
+import 'rxjs';
 
-
-export class Firerun {
-    constructor(
-        public id: number,
-        public description: string,
-        public participators: number = 0,
-        public created: Date = undefined
-    ) {
-        if (created === undefined) {
-            this.created = new Date();
-        }
-    }
-}
-
+declare var restdb: any
 @Component({
     styleUrls: ['./fireruns.component.scss'],
     templateUrl: './fireruns.component.html'
 })
+@Injectable()
 export class FirerunsComponent {
-    public fireruns: Array<Firerun> = []
+    public fireruns: Firerun[] = []
     public form: FormGroup;
     public showAdd: false;
+    public db: any
+    private _baseUrl = 'https://firebrigade-0d50.restdb.io/rest/fireruns?apikey=58aed4881336925a2571b19e'
+    private _currentSortField = 'created'
 
-    constructor(private _fb: FormBuilder) {
-        this.fireruns = []
-        if (Array.isArray(JSON.parse(localStorage.getItem('fireruns')))) {
-            this.fireruns = JSON.parse(localStorage.getItem('fireruns'));
-        }
+    constructor(private _fb: FormBuilder, private http: Http) {
+    }
 
-        if (this.fireruns)
-            this.fireruns = this.fireruns.sort((a ,b) => ( a.created >= b.created ) ?  -1 : 1)
+    private _loadFireruns() {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let baseUrl = 'https://firebrigade-0d50.restdb.io/rest/fireruns?apikey=58aed4881336925a2571b19e'
+
+        return this.http.get(baseUrl, headers).map(res => <Firerun[]>res.json()).subscribe(values => this.fireruns = values).add(() => this.sort(this._currentSortField));
     }
     private _getScopeIdentity() {
         let currentMaxId = 0;
@@ -55,33 +51,79 @@ export class FirerunsComponent {
     showFireruns() {
         return this.fireruns && this.fireruns.length > 0
     }
+
+    sort(field: string) {
+        if (field != this._currentSortField) {
+            this.fireruns.sort((a, b) => a[field] > b[field] ? -1 : 1)
+            this._currentSortField = field
+        }
+
+        if (this._currentSortField == field) {
+            this.fireruns.reverse()
+        }
+    }
+
     ngOnInit() {
+        this._loadFireruns()
 
-        // the long way
-
-        
         this.form = this._fb.group({
             description: new FormControl('', [<any>Validators.required, <any>Validators.minLength(20)]),
         });
+
+        /* realtime connection doest not work :-(
+        this.db = new restdb('58aed4881336925a2571b19e', { realtime: true });
+        console.log(this.db.fireruns)
+
+        console.log('Api Attached')
+
+
+        this.db.fireruns.on("POST", (error, eventdata) => { console.log('POST') })
+        this.db.fireruns.on("PUT", (error, eventdata) => { console.log('PUT') })
+
+
+        this.db.fireruns.on('POST', function (err, mess) {
+            console.log('event hit!')
+        });
+        */
+
     }
 
     add() {
-        this.fireruns.push(new Firerun(this._getScopeIdentity(), this.form.value.description, 0));
-        this.form.reset();
-        this.save();
-        this.showAdd = false;
+        console.log('add Function!')
+
+        let firerun = new Firerun(this._getScopeIdentity() + 1, this.form.value.description)
+
+        return this.http
+            .post(this._baseUrl, firerun)
+            .map((res) => {
+                this.form.reset();
+                this.showAdd = false;
+                return res.json()
+            }).catch((error: any) => Observable.throw(error.json().error || 'Server error')).subscribe().add(() => this._loadFireruns())
     }
 
-    save() {
-        localStorage.setItem('fireruns', JSON.stringify(this.fireruns))
+    save(firerun) {
+        let baseUrl = 'https://firebrigade-0d50.restdb.io/rest/fireruns/' + firerun._id + '?apikey=58aed4881336925a2571b19e'
+        this.form.reset();
+        this.showAdd = false;
+
+        return this.http
+            .put(baseUrl, firerun)
+            .map((res) => res.json())
+            .catch((error: any) => Observable.throw(error.json().error || 'Server error')).subscribe().add(() => this._loadFireruns())
     }
 
     addParticipant(id) {
-        this.fireruns.find(e => e.id = id).participators++;
-        this.save();
+        let firerun = this.fireruns.find(e => e.id == id)
+        firerun.participators++;
+        return this.save(firerun)
     }
     removeParticipant(id) {
-        this.fireruns.find(e => e.id = id).participators--;
-        this.save();
+        let firerun = this.fireruns.find(e => e.id == id)
+
+        if (firerun.participators > 0)
+            firerun.participators--;
+
+        return this.save(firerun)
     }
 }

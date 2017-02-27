@@ -3,15 +3,15 @@
 <table class="table" *ngIf="showFireruns()" >
   <thead>
     <tr>
-      <th class="left">Datum&nbsp;/&nbsp;Uhrzeit</th>
-      <th class="left">Beschreibung</th>
-      <th>Status</th>
+      <th (click)="sort('created')" class="left">Datum&nbsp;/&nbsp;Uhrzeit</th>
+      <th (click)="sort('description')" class="left">Beschreibung</th>
+      <th (click)="sort('participators')">Status</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let firerun of fireruns" >
-      <td class="left" title="{{firerun.id}}">{{firerun.created | amTimeAgo}} ({{firerun.created | amDateFormat:'DD. MMM &nbsp;HH:mm:ss'}}&nbsp;Uhr)</td>
+      <td class="left" title="{{firerun.id}}">{{firerun.created | amTimeAgo}} <br/> {{firerun.created | amDateFormat:'DD.&nbsp;MMM&nbsp;HH:mm:ss'}}&nbsp;Uhr</td>
       <td class="left">{{firerun.description}}</td>
       <td>{{firerun.participators}}</td>
       <td><clr-icon shape="arrow up" (click)="addParticipant(firerun.id)"></clr-icon><clr-icon (click)="removeParticipant(firerun.id)" shape="arrow down"></clr-icon></td>
